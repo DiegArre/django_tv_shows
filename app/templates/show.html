@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block titulo %} Show {% endblock %}
+
+
+{% block breadcrumb_active %}
+    <li class="breadcrumb-item active" aria-current="page">Shows</li>
+
+{% endblock %}
+
+
+{% block contenido %} 
+
+<h1>All Shows</h1>
+
+<table id="show_table" class="display" >
+    <tr>
+        <th>ID</th>
+        <th>Titulo</th>
+        <th>Network</th>
+        <th>Descripción</th>
+        <th>Release Date</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for show in shows %}
+
+    <tr>
+        <td>{{show.id}}</td>
+        <td>{{show.titulo}}</td>
+        <td>{{show.network}}</td>
+        <td>{{show.descripcion}}</td>
+        <td>{{show.release_date}}</td>
+        <td><a class="badge btn btn-primary rounded-pill" href="/shows/{{show.id}}">Show</a> / <a class="badge btn btn-success rounded-pill" href="/shows/{{show.id}}/edit">Edit</a> / <button name_show="{{show.titulo}}" id_show="{{show.id}}"  class="delete_a badge btn btn-danger rounded-pill"> Delete</button></td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<!-- Button trigger modal HIDDEN -->
+<button id="btn_modal" hidden data-bs-toggle="modal" data-bs-target="#modal_destroy">
+  </button>
+
+<!-- MODAL PARA CONFIRMAR DESTROY-->
+<div class="modal fade" id="modal_destroy" tabindex="-1" aria-labelledby="modal_destroy" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Estas seguro de eliminar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        Esto no se podra deshacer, ¡TENGA CUIDADO! <br> Estas eliminando el show:  
+        </div>
+        <div class="modal-footer">
+        <button id="Close_modal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a id="Borrar_show_btn" type="button" href=""  class="btn btn-danger">BORRAR</a>
+        </div>
+    </div>
+    </div>
+</div>
+
+<a href="/shows/new" class="btn btn-info mt-3 text-light">Agregar Show</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $("#show_table").DataTable();
+        });
+
+
+        // MODAL FUNCTION
+        $(".delete_a").on("click",function(){
+            
+            var id_show = $(this).attr("id_show");
+            var name_show=$(this).attr("name_show");
+            $("#btn_modal").trigger("click");
+            $("#Borrar_show_btn").attr("href","/shows/"+id_show+"/destroy");
+            $(".modal-body").append("<b id='eliminar' >"+name_show+"</b>");
+        });
+       
+        $("#Close_modal").on("click",function(){
+            $("#eliminar").remove();
+        });
+
+
+    </script>
+{% endblock %}

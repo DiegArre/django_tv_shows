@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block titulo %} Editar Show {% endblock %}
+
+{% block breadcrumb_active %}
+    <li class="breadcrumb-item"><a href="/shows">Shows</a></li>
+    <li class="breadcrumb-item"><a href="/shows/{{show.id}}">{{show.titulo}}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Edit</li>
+
+{% endblock %}
+
+{% block contenido %}
+
+<h1>Edit Show</h1>
+
+<form method="POST" action="create">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="textlabel1">Titulo</label>
+      <input name="titulo" type="text" class="form-control" id="textlabel1"  placeholder="Titulo" value="{{show.titulo}}" required>
+    </div>
+    <div class="row">
+
+        <div class="form-group col-6">
+        <label for="textlabel2">Network</label> 
+        <select id="select_net" name="network" class="form-select mb-1" aria-label="Default select example" required>
+          <option value= "">Seleciona una network</option>
+          {% for network in networks %}
+          <option id="network_{{network.id}}" value="{{network.id}}">{{network.nombre}}</option>
+          {% endfor %}
+          <option id="new_net_opt" value="">Crear una nueva</option>
+        </select>
+        <input type="text" class="form-control" id="textlabel2" placeholder="Crear Network" required disabled>
+        <input type="hidden" name="new_network" id="hidden_input_net" value="False"> 
+        </div>
+
+      
+
+        <div class="form-group col-6">
+        <label  for="dateinput">Release Date</label>
+        <input name="date" type="date" class="form-control" id="dateinput" value="{{show.release_date}}" datetype required>
+        </div>
+    </div>
+    <div class="form-group mb-2" >
+        <label for="textlabel3">Descripción</label>
+        <textarea  name="descripcion" type="text" class="form-control" id="textlabel3" rows="5" required>{{show.descripcion}}</textarea>
+    </div>
+    <div class="row justify-content-center">
+        <button type="submit" class="btn btn-success col-3">Update</button>
+    </div>
+  </form>
+
+{% endblock %}
+
+{% block scripts%}
+
+<script>
+
+
+
+// Validacion para crear o no una nueva NETWORK en FORM 
+$("#select_net").change(function () {
+
+    // se revisa si la opcion "Crear nueva network" esta seleccionada y desabilita el envio de datos del input SELECT
+    //cambiando el nombre de name
+    if ($("#new_net_opt").prop("selected")){
+       $("#select_net").attr("name" , "fake_net").removeAttr("required");
+       $("#textlabel2").attr("name" , "network").removeAttr("disabled");
+       $("#hidden_input_net").attr("value","True");
+    }
+    // Se vulve a la normalidad para que siga funcionando el envio con el SELECT y se desabilita el Crear nueva network
+    else{
+
+        $("#select_net").attr("name" , "network");
+        $("#textlabel2").attr("name" , "fake_net").attr("disabled","");
+        $("#hidden_input_net").attr("value", "False");
+    };
+})
+
+$(document).ready(function () {
+    $("#network_{{show.id}}").attr("selected","")
+});
+
+</script>
+
+{% endblock %}
