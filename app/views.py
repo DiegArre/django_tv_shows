@@ -53,6 +53,8 @@ def edit_show(request,id_show):
     }
     return render(request, "show_edit.html",context)
 
+
+
 def update_show(request,id_show):
     if request.method == "POST":
         print(request.POST)
@@ -71,6 +73,7 @@ def update_show(request,id_show):
         show.descripcion = request.POST["descripcion"]
         show.save()
     return redirect(f"/shows/{id_show}")
+
 
 
 def destroy_show(request,id_show):

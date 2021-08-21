@@ -27,7 +27,10 @@ x
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script> -->
 
 
-
+    <!-- TOASTR IMPORT -->
+    <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+    
 
     <!-- ESTILOS -->
     {% block estilos %} {% endblock %}
@@ -85,6 +88,20 @@ x
     <!-- BOOTSTRAP IMPORT JS -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
+<script> 
+
+toastr.options = {
+  "closeButton": true,
+};
+
+{% if messages %}
+    {% for message in messages %}    
+        toastr.{{message.tags}}('{{ message }}')
+    {% endfor %}
+{% endif %}
+
+</script>
 
 {% block scripts %} {% endblock %}
   
