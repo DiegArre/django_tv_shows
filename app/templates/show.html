@@ -55,7 +55,8 @@
         </div>
         <div class="modal-footer">
         <button id="Close_modal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <a id="Borrar_show_btn" type="button" href=""  class="btn btn-danger">BORRAR</a>
+        <a id="Borrar_show_btn" type="button"  class="btn btn-danger">BORRAR</a>
+        <form id="form_destroy" action="" method="POST">{% csrf_token %}</form>
         </div>
     </div>
     </div>
@@ -77,12 +78,16 @@
             var id_show = $(this).attr("id_show");
             var name_show=$(this).attr("name_show");
             $("#btn_modal").trigger("click");
-            $("#Borrar_show_btn").attr("href","/shows/"+id_show+"/destroy");
+            $("#form_destroy").attr("action","/shows/"+id_show+"/destroy");
             $(".modal-body").append("<b id='eliminar' >"+name_show+"</b>");
         });
        
         $("#Close_modal").on("click",function(){
             $("#eliminar").remove();
+        });
+
+        $("#Borrar_show_btn").on("click",function(){
+                $("#form_destroy").submit();
         });
 
 

@@ -16,7 +16,7 @@
 <p>Release Date: {{show.release_date}}</p>
 <p>Descripcion: {{show.descripcion}}</p>
 <hr>
-<p>Last updated: {{show.updated_at}}</p>
+<p>Last updated: {{show.update_at}}</p>
 
 <p><a href="{{show.id}}/edit" class="badge btn bg-success rounded-pill"> Edit </a> / <a id="delete_a" class="badge btn bg-danger rounded-pill">Delete</a></p>
 
@@ -38,7 +38,8 @@
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <a type="button" href="{{show.id}}/destroy"  class="btn btn-danger">BORRAR</a>
+        <a type="button" id="btn_destroy" class="btn btn-danger">BORRAR</a>
+        <form id="form_destroy" action="{{show.id}}/destroy" method="POST">{% csrf_token %}</form>
         </div>
     </div>
     </div>
@@ -55,5 +56,9 @@
         $("#btn_modal").trigger("click")
     });
 
+    $("#btn_destroy").on("click",function(){
+            console.log("Funciona el click");
+            $("#form_destroy").submit();
+    });
 </script>
 {% endblock %}

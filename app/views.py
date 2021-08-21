@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import Network, Show
-
+from django.contrib import messages
 # Create your views here.
 
 def start(request):
@@ -36,7 +36,7 @@ def create_show(request):
             release_date = request.POST["date"],
             descripcion = request.POST["descripcion"]
         )
-
+    messages.info(request,f"El show {nuevo_show.titulo} se a creado")
     return redirect("/shows")
 
 def mostrar_show(request,id_show):
@@ -67,16 +67,20 @@ def update_show(request,id_show):
             add_network = Network.objects.get(id=int(request.POST["network"]))
 
         show = Show.objects.get(id=id_show)
-        show.titulo = request.POST["titulo"],
-        show.network = add_network,
-        show.release_date = request.POST["date"],
+        show.titulo = request.POST["titulo"]
+        show.network = add_network
+        show.release_date = request.POST["date"]
         show.descripcion = request.POST["descripcion"]
         show.save()
+
+        messages.success(request,f"El show ({show.titulo}) se ha editado correctamente")
     return redirect(f"/shows/{id_show}")
 
 
 
 def destroy_show(request,id_show):
-    show = Show.objects.get(id=id_show)
-    show.delete()
+    if request.method == "POST":
+        show = Show.objects.get(id=id_show)
+        messages.error(request,f"El show {show.titulo} se ha eliminado correctamente")
+        show.delete()
     return redirect("/shows")
